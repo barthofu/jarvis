@@ -1,6 +1,6 @@
 from os import path
 
-USE_STT = False
+USE_STT = True
 USE_TTS = True
 
 # =========== STT ===========
