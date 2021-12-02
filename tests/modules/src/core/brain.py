@@ -40,5 +40,7 @@ class Brain:
         
         for module in self.modules:
             for task in module['tasks']:
-                print(task)
-                print(task.match(text))
+                if (task.match(text)):
+                    return task
+
+        return False

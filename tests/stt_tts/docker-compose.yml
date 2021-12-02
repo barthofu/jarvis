@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+
+  jarvis-tests:
+    image: jarvis-tests
+    build: .
+    volumes:
+      - ./:/jarvis-app
+      - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
+    env_file:
+      - .env
+    restart: always
