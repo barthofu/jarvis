@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+
+  jarvis:
+    image: jarvis
+    build: .
+    volumes:
+      - ./:/jarvis-app
+    env_file:
+      - .env
+    restart: always
