@@ -1,0 +1,20 @@
+import pywhatkit
+import datetime
+import pyjokes
+import wikipedia
+
+
+command = 'who the heck is, elon musk'
+if 'play' in command:
+    song = command.replace('play', '')
+    pywhatkit.playonyt(song)
+elif 'time' in command:
+        time = datetime.datetime.now().strftime('%I:%M %p')
+        print(time)
+elif 'joke' in command:
+        joke = pyjokes.get_joke()
+        print(joke)
+elif 'who the heck is' in command:
+        person = command.replace('who the heck is', '')
+        info = wikipedia.summary(person, 1)
+        print(info)
