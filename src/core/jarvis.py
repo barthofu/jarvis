@@ -27,9 +27,10 @@ class Jarvis:
                 
                 tasks = []
                 for taskKey in [*dict([(name, cls) for name, cls in module.__dict__.items() if isinstance(cls, type)])]:
-                    task = getattr(module, taskKey)
-                    instanciedTask = task(['musique'])
-                    tasks.append(instanciedTask)
+                    if taskKey.endswith('Task') and taskKey != 'Task':
+                        Task = getattr(module, taskKey)
+                        instanciedTask = Task()
+                        tasks.append(instanciedTask)
                     
                 self.modules.append({
                     'name': moduleName,
@@ -40,9 +41,9 @@ class Jarvis:
     def matchTask (self, text):
 
         matches = []
-        
-        for module in list(self.modules.keys()):
-            for task in module.tasks:
+
+        for module in self.modules:
+            for task in module['tasks']:
 
                 ratio = max(task.match(text))
 
@@ -59,51 +60,39 @@ class Jarvis:
         # sort by ratio in descending order to find the max one
         matches = sorted(matches, key = lambda x: x['ratio'], reverse = True)
 
-        return matches[0].task
+        return matches[0]['task']
                 
     
     def executeTask(self, task, text):
         
-        responseText = task.run(text)
+        responseText = task.action(text)
         self.speak(responseText)
         
     
     def speak(self, text):
 
         if config.USE_TTS:
-            tts.speak(text)
+            self.tts.speak(text)
         else:
             print(text)
     
     
     def listen(self):
 
-        try:
-            if config.USE_STT:
-                # self.stt.waitForKeyword()
-                text = self.tts.activeListen()
-            else:
-                text = input('> ')
-            
+
+        if config.USE_STT:
+            # self.stt.waitForKeyword()
+            text = self.tts.activeListen()
             if not text:
                 print('No text input received.')
                 return
             else:
                 print("'" + text + "'")
+        else:
+            text = input('> ')
 
-            text = parser.parse(text)
-                
-            task = self.matchTask(text)
-            self.executeTask(task, text)
-                
-        except OSError as e:
-            if 'Invalid input device' in str(e):
-                print('Invalid input device')
-                return
-            else:
-                raise Exception
-        except (EOFError, KeyboardInterrupt):
-            print('Shutting down...')
-            return
-        except:
-            print("(runtime error)")
+        text = parser.parse(text)
+            
+        task = self.matchTask(text)
+        self.executeTask(task, text)
+            

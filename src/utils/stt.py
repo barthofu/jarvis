@@ -2,52 +2,13 @@ import config
 import os, sys, traceback
 import pyaudio
 import speech_recognition as sr
-from pocketsphinx import DefaultConfig, Decoder, get_model_path, get_data_path
 
 class STT:
     
     def __init__(self):
         
-        # Create a decoder with certain model
-        conf = DefaultConfig()
-        conf.set_string('-hmm', os.path.join(get_model_path(), 'en-us'))
-        conf.set_string('-dict', os.path.join(get_model_path(), 'cmudict-en-us.dict'))
-        conf.set_string('-kws',   config.KEYPHRASES)
-
-        self.decoder = Decoder(conf)
         self.p = pyaudio.PyAudio()
-        
         self.r = sr.Recognizer()
-
-
-
-    def waitForKeyword(self):
-        with self._ignore_stderr():
-            stream = self.p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
-            stream.start_stream()
-            
-            print("Waiting to be woken up...")
-            # Process audio chunk by chunk. On keyword detected perform action and restart search
-            self.decoder.start_utt()
-            waiting = False
-            waitCount = 0
-            while True:
-                buf = stream.read(1024, exception_on_overflow=False)
-                self.decoder.process_raw(buf, False, False)
-                if self.decoder.hyp():
-                    if self.decoder.hyp().hypstr[:13] == "jarvis cancel" or self.decoder.hyp().hypstr[:11] == "jarvis stop":
-                        self.decoder.end_utt()
-                        return "jarvis stop"
-                    else:
-                        if waiting:
-                            if waitCount >= 8:
-                                self.decoder.end_utt()
-                                return "jarvis"
-                            else:
-                                waitCount += 1
-                        else:
-                            waiting = True
-        
         
         
     def activeListen(self):

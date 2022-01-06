@@ -1,7 +1,7 @@
 from os import path
 
 USE_STT = False
-USE_TTS = True
+USE_TTS = False
 
 # =========== STT ===========
 
@@ -18,7 +18,7 @@ KEYPHRASES = path.join(SRC_DIR, 'data/keyphrases.txt')
 
 MODULES_IMPORT_DIR = "src.modules"
 
-# =========== Directories ===========
+# =========== Parser ===========
 
-IGNORE_KEYWORDS = [ 'hey jarvis', ',', 'please', 'the', ' a ', 'an' ]
+IGNORE_KEYWORDS = [ 'hey jarvis', ',', 'please', ' the ', ' a ', ' an ', ' can you ' ]
 TRESHOLD = 0.6

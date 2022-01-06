@@ -6,7 +6,8 @@ class Task:
     def __init__(self, phrases = [], stopPriority = False):
         
         self.phrases = phrases
-
+        self.stopPriority = stopPriority
+        
         # if phrases:
         #     p = r'.*\b('
         #     p += str(words)[1:-1].replace('\'', '').replace(', ', '|')

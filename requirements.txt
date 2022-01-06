@@ -1,5 +1,7 @@
 pyaudio
 speechrecognition
-pocketsphinx
 gtts
 playsound
+python_weather
+asyncio
+picamera

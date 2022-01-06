@@ -3,6 +3,6 @@ import config
 def parse(text):
 
     for keyword in config.IGNORE_KEYWORDS:
-        str = str.replace(keyword, '')
+        text = text.replace(keyword, '')
         
-    return str.replace('  ', ' ').replace('  ', ' ').strip()
+    return text.replace('  ', ' ').replace('  ', ' ').strip()
