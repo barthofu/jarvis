@@ -7,9 +7,9 @@ services:
     build: .
     volumes:
       - ./:/jarvis-app
-      - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
-    devices:
-      - /dev/snd:/dev/snd
+      # - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
+    # devices:
+      # - /dev/snd:/dev/snd
     env_file:
       - .env
     restart: always

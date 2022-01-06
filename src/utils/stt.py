@@ -51,10 +51,7 @@ class STT:
         
         
     def activeListen(self):
-        """
-        Actively listens for speech to translate into text
-        :return: speech input as a text string
-        """
+
         with self._ignore_stderr():
             with sr.Microphone() as source:
                 # listen for 1 second to adjust energy threshold for ambient noise
@@ -65,12 +62,12 @@ class STT:
                 # listen for the first phrase and extract it into audio data
                 audio = self.r.listen(source)
 
-        msg = ''
+        text = ''
         try:
             if config.ACTIVE_ENGINE == "google":
-                msg = self.r.recognize_google(audio)  # recognize speech using Google STT
+                text = self.r.recognize_google(audio)  # recognize speech using Google STT
             elif config.ACTIVE_ENGINE == "sphinx":
-                msg = self.r.recognize_sphinx(audio)
+                text = self.r.recognize_sphinx(audio)
         except sr.UnknownValueError:
             print("Could not understand")
         except sr.RequestError as e:
@@ -79,7 +76,7 @@ class STT:
             print("Unknown exception occurred!")
             print(traceback.format_exc())
         finally:
-            return msg
+            return text
         
         
         

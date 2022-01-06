@@ -7,4 +7,4 @@ RUN apt-get update
 RUN apt-get --assume-yes install libpulse-dev pulseaudio swig gcc portaudio*
 RUN python -m pip install -r requirements.txt
 
-CMD ["python", "main.py"]
+CMD ["python", "stt.py"]

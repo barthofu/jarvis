@@ -1,5 +1,5 @@
 pyaudio
 speechrecognition
-pocketsphinx
-gtts
-playsound
+# pocketsphinx
+# gtts
+# playsound

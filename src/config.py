@@ -1,6 +1,6 @@
 from os import path
 
-USE_STT = True
+USE_STT = False
 USE_TTS = True
 
 # =========== STT ===========
@@ -17,3 +17,8 @@ SOUNDS_DIR = path.join(MEDIA_DIR, 'sounds')
 KEYPHRASES = path.join(SRC_DIR, 'data/keyphrases.txt')
 
 MODULES_IMPORT_DIR = "src.modules"
+
+# =========== Directories ===========
+
+IGNORE_KEYWORDS = [ 'hey jarvis', ',', 'please', 'the', ' a ', 'an' ]
+TRESHOLD = 0.6

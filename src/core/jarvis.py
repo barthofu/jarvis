@@ -4,7 +4,7 @@ import speech_recognition as sr
 import config
 
 from os import listdir, path
-from utils import stt, tts
+from utils import stt, tts, parser
 
 class Jarvis:
     
@@ -13,8 +13,7 @@ class Jarvis:
         self.stt = stt.STT()
         self.tts = tts.TTS()
 
-        self.modules = type("", (), {})()
-    
+        self.modules = []
     
     
     def loadModules(self):
@@ -25,24 +24,52 @@ class Jarvis:
             if (file.endswith('.py') and not file.startswith('_')):
                 moduleName = file.split('.')[0]
                 module = importlib.import_module(config.MODULES_IMPORT_DIR + '.' + moduleName)
-                setattr(self.modules, moduleName, module)
+                
+                tasks = []
+                for taskKey in [*dict([(name, cls) for name, cls in module.__dict__.items() if isinstance(cls, type)])]:
+                    task = getattr(module, taskKey)
+                    instanciedTask = task(['musique'])
+                    tasks.append(instanciedTask)
+                    
+                self.modules.append({
+                    'name': moduleName,
+                    'tasks': tasks   
+                })
     
-    def matchModule (self, text):
+
+    def matchTask (self, text):
+
+        matches = []
         
         for module in list(self.modules.keys()):
             for task in module.tasks:
-                pass
+
+                ratio = max(task.match(text))
+
+                # if the ratio is suffisent enough and the task has a stop priority option, it will directly return it
+                if ratio > config.TRESHOLD and task.stopPriority:
+                    return task
+                
+                matches.append({
+                    'task': task,
+                    # we search for the highest ratio among all the phrases triggers of the task
+                    'ratio': ratio
+                })
+
+        # sort by ratio in descending order to find the max one
+        matches = sorted(matches, key = lambda x: x['ratio'], reverse = True)
+
+        return matches[0].task
                 
     
-    def execModule(self, moduleName, actionName):
-        module = getattr(self.modules, moduleName)
-        action = getattr(module, actionName)()
+    def executeTask(self, task, text):
         
-        responseText = action.run()
+        responseText = task.run(text)
         self.speak(responseText)
         
     
     def speak(self, text):
+
         if config.USE_TTS:
             tts.speak(text)
         else:
@@ -50,31 +77,33 @@ class Jarvis:
     
     
     def listen(self):
-        while True:
-            try:
-                if config.USE_STT:
-                    self.stt.waitForKeyword()
-                    text = self.tts.activeListen()
-                else:
-                    text = input('> ')
+
+        try:
+            if config.USE_STT:
+                # self.stt.waitForKeyword()
+                text = self.tts.activeListen()
+            else:
+                text = input('> ')
+            
+            if not text:
+                print('No text input received.')
+                return
+            else:
+                print("'" + text + "'")
+
+            text = parser.parse(text)
                 
-                if not text:
-                    print('No text input received.')
-                    continue
-                else:
-                    print("'" + text + "'")
-                    
-                self.matchMods(text)
-                self.executeMods(text)
-                    
-            except OSError as e:
-                if 'Invalid input device' in str(e):
-                    print('Invalid input device')
-                    break
-                else:
-                    raise Exception
-            except (EOFError, KeyboardInterrupt):
-                print('Shutting down...')
-                break
-            except:
-                print("(runtime error)")
+            task = self.matchTask(text)
+            self.executeTask(task, text)
+                
+        except OSError as e:
+            if 'Invalid input device' in str(e):
+                print('Invalid input device')
+                return
+            else:
+                raise Exception
+        except (EOFError, KeyboardInterrupt):
+            print('Shutting down...')
+            return
+        except:
+            print("(runtime error)")
