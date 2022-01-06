@@ -1,0 +1,7 @@
+pyaudio
+speechrecognition
+gtts
+playsound
+python_weather
+asyncio
+picamera
