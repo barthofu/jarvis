@@ -1,4 +1,4 @@
-from src.core.task import Task 
+from src.utils.task import Task 
 
 import pyjokes
 
@@ -11,5 +11,5 @@ class JokeTask(Task):
         
     def action(self, text):
         
-        return pyjokes.get_jokes()
+        return pyjokes.get_joke()
         

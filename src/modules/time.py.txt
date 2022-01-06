@@ -1,4 +1,4 @@
-from src.core.task import Task 
+from src.utils.task import Task 
 
 from datetime import datetime
 from sense_hat import SenseHat

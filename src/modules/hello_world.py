@@ -1,4 +1,4 @@
-from src.core.task import Task 
+from src.utils.task import Task 
 
 class HelloWorldTask(Task):
     

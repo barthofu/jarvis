@@ -18,11 +18,12 @@ class Jarvis:
     
     def loadModules(self):
         
-        files = listdir(path.abspath(__file__ + "/../../modules/"))
+        files = listdir(path.abspath(__file__ + "/../modules/"))
         
         for file in files:
             if (file.endswith('.py') and not file.startswith('_')):
                 moduleName = file.split('.')[0]
+                print(moduleName)
                 module = importlib.import_module(config.MODULES_IMPORT_DIR + '.' + moduleName)
                 
                 tasks = []

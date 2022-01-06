@@ -21,4 +21,4 @@ MODULES_IMPORT_DIR = "src.modules"
 # =========== Parser ===========
 
 IGNORE_KEYWORDS = [ 'hey jarvis', ',', 'please', ' the ', ' a ', ' an ', ' can you ' ]
-TRESHOLD = 0.6
+TRESHOLD = 0.5
