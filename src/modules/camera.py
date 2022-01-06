@@ -7,6 +7,7 @@ class CameraTask(Task):
     
     def __init__(self):
         super().__init__([
+            "start recording",
             "record"
         ])
         self.camera = PiCamera()

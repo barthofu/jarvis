@@ -5,3 +5,6 @@ playsound
 python_weather
 asyncio
 picamera
+pyjokes
+wikipedia
+pywhatkit
