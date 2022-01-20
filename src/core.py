@@ -23,7 +23,6 @@ class Jarvis:
         for file in files:
             if (file.endswith('.py') and not file.startswith('_')):
                 moduleName = file.split('.')[0]
-                print(moduleName)
                 module = importlib.import_module(config.MODULES_IMPORT_DIR + '.' + moduleName)
                 
                 tasks = []
@@ -46,15 +45,19 @@ class Jarvis:
         for module in self.modules:
             for task in module['tasks']:
 
+                if not task.enabled:
+                    continue
+
+                # we search for the highest ratio among all the phrases triggers of the task
                 ratio = max(task.match(text))
 
-                # if the ratio is suffisent enough and the task has a stop priority option, it will directly return it
+                # if the ratio is suffisent enough and the task has a 
+                # stop priority option, it will directly return it
                 if ratio > config.TRESHOLD and task.stopPriority:
                     return task
                 
                 matches.append({
                     'task': task,
-                    # we search for the highest ratio among all the phrases triggers of the task
                     'ratio': ratio
                 })
 
@@ -80,10 +83,10 @@ class Jarvis:
     
     def listen(self):
 
-
         if config.USE_STT:
-            # self.stt.waitForKeyword()
-            text = self.tts.activeListen()
+
+            text = self.stt.activeListen()
+
             if not text:
                 print('No text input received.')
                 return
@@ -96,4 +99,3 @@ class Jarvis:
             
         task = self.matchTask(text)
         self.executeTask(task, text)
-            

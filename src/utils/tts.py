@@ -1,36 +1,15 @@
-import tempfile
-import os
-# import pygame
+import tempfile, os
 import config 
 from playsound import playsound
 
 from gtts import gTTS
-# from pygame import mixer
 
 class TTS:
-    
-    # def __init__(self):
-    #     mixer.init()
-        
-        
         
     def playMP3(self, fileName, filePath = config.SOUNDS_DIR, blocking = False):
-        
-        playsound(os.path.join(filePath, fileName))
-        
-        # if ".mp3" in fileName:
-        #     mixer.music.load(os.path.join(filePath, fileName))
-        #     mixer.music.play
-        # else:
-        #     sound = pygame.mixer.Sound(os.path.join(filePath, fileName))
-        #     chan = pygame.mixer.find_channel()
-        #     chan.queue(sound)
 
-        # if blocking:
-        #     while mixer.music.get_busy():
-        #         pygame.time.delay(100)
-          
-          
+        playsound(os.path.join(filePath, fileName))
+
                 
     def speak(self, text, showText = True):
         
@@ -38,14 +17,15 @@ class TTS:
             print(text)
 
         try:
+            # we first create a temp mp3 file of the audio output
             tts = gTTS(text = text)
-
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.mp3',
-                                            delete=False) as f:
+            with tempfile.NamedTemporaryFile(mode='wb', suffix='.mp3', delete=False) as f:
                 (tempPath, tempName) = os.path.split(f.name)
                 tts.write_to_fp(f)
 
+            # and then we play it
             self.playMP3(tempName, tempPath)
+            
             os.remove(os.path.join(tempPath, tempName))
 
         except Exception as e:

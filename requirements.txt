@@ -9,3 +9,5 @@ pyjokes
 wikipedia
 pywhatkit
 sense_hat
+playsound
+gtts

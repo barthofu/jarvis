@@ -1,21 +1,13 @@
-import config
 from difflib import SequenceMatcher
 
 class Task:
     
-    def __init__(self, phrases = [], stopPriority = False):
+    def __init__(self, phrases = [], stopPriority = False, enabled = True):
         
         self.phrases = phrases
         self.stopPriority = stopPriority
-        
-        # if phrases:
-        #     p = r'.*\b('
-        #     p += str(words)[1:-1].replace('\'', '').replace(', ', '|')
-        #     p += r')\b.*'
-        #     patterns.append(p)
+        self.enabled = enabled
 
-        # self.patterns = patterns
-            
             
     def match(self, text):
 
@@ -27,4 +19,3 @@ class Task:
             matched.append(comparison.ratio())
 
         return matched
-        
